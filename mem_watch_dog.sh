@@ -31,10 +31,10 @@ check_memory() {
         echo "Memory usage exceeds threshold ($THRESHOLD_PERCENTAGE%)."
         echo "Total Memory: $total_mem MB, Used Memory: $used_mem MB ($percentage%)" | tee $LOG_FILE
         # Get processes consuming significant memory
-        PIDS=`ps aux --sort=-%mem | grep $FILTER_CMD | grep -v "grep" | head -n $N_PIDS_TO_KILL | awk '{print $2","$4","$1","$11}' | tee -a $LOG_FILE | sed 's/,.*$//g' | tr "\n" " "`
+        PIDS=$(ps aux --sort=-%mem | grep $FILTER_CMD | grep -v "grep" | head -n $N_PIDS_TO_KILL | awk '{print $2","$4","$1","$11}' | tee -a $LOG_FILE | sed 's/,.*$//g' | tr "\n" " ")
 
-        for pid in "${PIDS}" ; do
-            kill -15 $pid
+        for pid in ${PIDS} ; do
+            kill -15 "$pid"
             result=$?
             echo "kill -15 $pid  returned: $result" | tee -a $LOG_FILE;
         done
